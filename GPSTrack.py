@@ -5,27 +5,27 @@ import datetime as dt
 #imports modules for networking and reading the sensors
 import network
 import socket
-from machine import Pin, I2C
+import i2cdevice
 import bme280
 
 #imports file creation library
 import csv
 
 #Initialize network settings
-ssid = 'Cisco05250' #Your network name
-password = 'goober1234567' #Your WiFi password
+ssid = '$SSID' #Your network name
+password = '$PASSWORD' #Your Wi-Fi password
 
 #initialize I2C
-#i2c=I2C(0,sda=Pin(0), scl=Pin(1), freq=400000)
+i2c=i2cdevice(0,sda=Pin(0), scl=Pin(1), freq=400000)
 
 #Connect to WLAN
 def connect():
     wlan = network.WLAN(network.STA_IF)
     wlan.active(True)
     wlan.connect(ssid, password)
-    while wlan.isconnected() == False:
+    while not wlan.isconnected():
         print('Waiting for connection...')
-        sleep(1)
+        time.sleep(1)
     ip = wlan.ifconfig()[0]
     print(f'Connected on {ip}')
     return ip
@@ -56,8 +56,6 @@ while x < 6:
     time.sleep(2)
     x += 1
 
-file.close()
-#Just to clean things up. I don't think I technically need it anymore but it's how
-#I learned and it doesn't break anything.
+
 quit()
 
